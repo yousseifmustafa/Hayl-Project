@@ -1,0 +1,27 @@
+.button {
+  width: 48%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dcdcdc;
+  border-radius: 9999px;
+  transition: all 0.3s ease-in-out;
+}
+
+.button:hover {
+  background-color: #f3c830;
+}
+
+.icon {
+  transition: transform 0.3s ease;
+}
+
+.icon:hover {
+  transform: rotateX(180deg);
+}
+
+/* Adjustments for the checkout button hover */
+.group:hover .icon {
+  transform: translateX(8px);
+}

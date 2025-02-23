@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: "Lora";
+  src: url("/fonts/Lora-Regular.woff2") format("woff2"),
+    url("/fonts/Lora-Regular.woff") format("woff");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.woff2") format("woff2"),
+    url("/fonts/Inter-Regular.woff") format("woff");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+:root {
+  --primary-color: #d4b257;
+  --primary-fonts: "Inter", sans-serif;
+  --secondary-fonts: "Lora", serif;
+}
+
+::selection {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.Inter {
+  font-family: var(--primary-fonts);
+}
+.lora {
+  font-family: var(--secondary-fonts);
+}
+
+.auth {
+  background-image: url("https://res.cloudinary.com/dl9gghlyx/image/upload/v1739318698/img_vur2h4.png");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+.trans {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+body {
+  font-family: var(--primary-fonts);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--primary-fonts);
+  font-weight: 700;
+}
+
+p {
+  font-family: var(--secondary-fonts);
+}
+
+.hover-main:hover {
+  color: var(--primary-color);
+}
+
+.active {
+  color: var(--primary-color);
+  font-size: 200%;
+  font-weight: 900;
+  transform: translateY(-5px) scale(1.2);
+}
+
+.main-color {
+  color: var(--primary-color);
+}
+.main-bg-color {
+  background-color: var(--primary-color);
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes borderGrow {
+  0% {
+    width: 0;
+    left: 0;
+  }
+  100% {
+    width: 100%;
+    left: 0;
+  }
+}
+
+.navlink-hover-border {
+  position: relative;
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  transition: color 0.3s ease, font-size 0.3s ease;
+}
+
+.navlink-hover-border span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: var(--primary-color);
+  width: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.navlink-hover-border:hover span {
+  opacity: 1;
+  animation: borderGrow 0.5s forwards;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .search-dropdown {
+    max-height: 50%; 
+  }
+}
+
+.input {
+  @apply border px-3 py-2 rounded w-full;
+}
