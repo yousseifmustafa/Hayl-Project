@@ -14,7 +14,7 @@ export default function Account() {
     <div className="flex">
       <Sidebar Page={page} setPage={setPage} />
 
-      <div className="w-[75%] p-6">
+      <div className="w-[75%] md:p-6">
         {page === "profile" && <Profile />}
         {page === "security" && <Security />}
         {page === "addresses" && <Address />}

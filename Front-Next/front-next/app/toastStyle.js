@@ -1,0 +1,25 @@
+export const toastStyles = {
+    success: {
+      background: "rgba(212, 178, 87, 0.6)", 
+      color: "#F9F9F9",
+      borderRadius: "12px",
+      boxShadow: "0 6px 12px #101922",
+      padding: "18px 10px",
+      fontSize: "18px",
+      fontWeight: "bold",
+      maxWidth: "50%",
+      backdropFilter: "blur(5px)",
+    },
+    error: {
+      background: "#8b3a3a",
+      color: "#F9F9F9",
+      borderRadius: "12px",
+      boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)",
+      padding: "18px 35px",
+      fontSize: "17px",
+      fontWeight: "bold",
+      maxWidth: "480px",
+      border: "1px solid #722626",
+      backdropFilter: "blur(5px)",
+    },
+  };

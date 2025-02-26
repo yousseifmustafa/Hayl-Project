@@ -1,15 +1,22 @@
 import { NextResponse } from "next/server";
-import { jwtVerify } from "jose";
-import { useAuth } from "@/context/Authcontext";
 
-export async function middleware(req) {
-  // const token = req.cookies.get("jwt")?.value;
-  
-  // console.log("token is :" , req.cookies.get("jwt")?.value);
-  
+export function middleware(req) {
+  const url = req.nextUrl.clone();
+  const lowercasePath = url.pathname.toLowerCase();
 
+  const rewrites = {
+    "/login": "/auth/login",
+    "/signup": "/auth/signup",
+    "/forgetpassword": "/auth/forgetPassword",
+    "/registervalidate": "/auth/RegisterValidate",
+    "/resetvalidate": "/auth/ResetValidate",
+    "/resetpassword": "/auth/resetPassword",
+  };
+
+  if (rewrites[lowercasePath]) {
+    url.pathname = rewrites[lowercasePath];
+    return NextResponse.rewrite(url);
+  }
+
+  return NextResponse.next();
 }
-
-export const config = {
-  matcher: ["/wishlist/:path*", "/cart/:path*", "/account/:path*", "/management/:path*"],
-};

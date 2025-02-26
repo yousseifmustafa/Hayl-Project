@@ -1,11 +1,15 @@
 "use client";
 
-
-export default function ShippingForm({ handleChange, formData}) {
+export default function ShippingForm({ handleChange, formData }) {
   return (
     <div className="w-full lg:w-2/3 mt-3">
       <div className="p-6 border rounded-lg bg-white shadow-sm">
-        <h2 className="text-lg font-semibold mb-4">Shipping Address</h2>
+        <div className="flex  items-center justify-between  font-semibold">
+          <p className="text-lg font-semibold mb-4">Shipping Address</p>
+          <button className="text-md mb-4 text-custom-yellow-4 hover:cursor-pointer">
+            <p>Use Default</p>
+          </button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             name="fullName"

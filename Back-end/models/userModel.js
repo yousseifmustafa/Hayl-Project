@@ -28,7 +28,7 @@ const userSchema = mongoose.Schema({
     select: false,
     validate: {
       validator: (val) =>
-        /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[#^-_=?؟@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#^-_=?؟@$!%*?&])[A-Za-z\d#^-_=?؟@$!%*?&]{8,}$/.test(
           val
         ),
       message:
@@ -95,6 +95,26 @@ const userSchema = mongoose.Schema({
     otp: { type: String },
     otpExpires: { type: Date },
   },
+  address: [
+    {
+      name: { type: String, required: true },
+      phone: {
+        type: String,
+        required: true,
+        match: [
+          /^(\+20|0)1[0-9]{9}$/,
+          "Please enter a valid Egyptian phone number",
+        ],
+      },
+      department: { type: String, required: true },
+      street: { type: String, required: true },
+      building: { type: String, required: true },
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      postalCode: { type: Number, required: true },
+      isDefault: { type: Boolean },
+    },
+  ],
   newPhone: { type: String },
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 
@@ -108,6 +128,22 @@ const userSchema = mongoose.Schema({
   emailConfirmToken: String,
   emailConfirmTokenExpires: Date,
   emailConfirmed: { type: Boolean, default: false },
+});
+
+userSchema.pre("save", function (next) {
+  if (this.address && this.address.length > 0) {
+    const hasDefault = this.address.some((addr) => addr.isDefault);
+
+    if (hasDefault) {
+      this.address = this.address.map((addr, ind) => ({
+        ...addr,
+        isDefault: ind === this.address.findIndex((a) => a.isDefault),
+      }));
+    } else {
+      this.address[0].isDefault = true;
+    }
+  }
+  next();
 });
 
 userSchema.methods.generateOTP = function () {
@@ -131,33 +167,6 @@ userSchema.pre(/^find/, function (next) {
   this.where({ active: { $ne: false } });
   next();
 });
-
-
-// userSchema.methods.generatePasswordResetToken = function () {
-//   const rToken = crypto.randomBytes(32).toString("hex");
-//   this.UserResetToken = crypto
-//     .createHash("sha256")
-//     .update(rToken)
-//     .digest("hex");
-//   this.UserResetTokenTime = Date.now() + 15 * 60 * 1000;
-//   setTimeout(
-//     () => {
-//       this.UserResetToken = undefined; // مسح التوكن تلقائيًا بعد 15 دقيقة
-//     },
-//     15 * 60 * 1000
-//   );
-
-//   return rToken;
-// };
-
-// userSchema.methods.generatePasswordResetToken = function () {
-//   const otpCode = crypto.randomInt(100000, 999999).toString();
-//   this.UserResetToken = otpCode;
-//   this.UserResetTokenTime = Date.now() + 5 * 60 * 1000;
-
-//   return otpCode;
-// };
-
 
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {

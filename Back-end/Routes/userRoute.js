@@ -19,7 +19,7 @@ router.patch("/resetPassword", authController.resetPassword);
 router.patch(
   "/updatePassword",
   authMiddleware.protect,
-  userController.updatePassword
+  authController.updatePassword
 );
 router.patch("/Me", authMiddleware.protect, userController.UpdateMe);
 router.delete("/Me", authMiddleware.protect, userController.deleteMe);
@@ -30,6 +30,20 @@ router.get(
   authMiddleware.restrictTo(["admin"]),
   userController.GetAllUsers
 );
+router.get("/Address", authMiddleware.protect, userController.getAddress);
+router.get(
+  "/defaultAddress",
+  authMiddleware.protect,
+  userController.getDefaultAddress
+);
+router.patch(
+  "/DefaultAddress",
+  authMiddleware.protect,
+  userController.setDefaultAddress
+);
+router.post("/Address", authMiddleware.protect, userController.addAddress);
+router.patch("/Address", authMiddleware.protect, userController.updateAddress);
+router.delete("/Address", authMiddleware.protect, userController.deleteAddress);
 
 router.post("/sync", authMiddleware.protect, syncWithDatabase, (req, res) => {
   res.status(200).json({ message: "Login successful and data synced" });

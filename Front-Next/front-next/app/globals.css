@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @font-face {
   font-family: "Lora";
   src: url("/fonts/Lora-Regular.woff2") format("woff2"),
@@ -20,7 +19,7 @@
 }
 
 :root {
-  --primary-color: #d4b257;
+  --primary-color: rgb(212, 178, 87);
   --primary-fonts: "Inter", sans-serif;
   --secondary-fonts: "Lora", serif;
 }
@@ -148,10 +147,25 @@ p {
 
 @media (max-width: 640px) {
   .search-dropdown {
-    max-height: 50%; 
+    max-height: 50%;
   }
 }
 
 .input {
   @apply border px-3 py-2 rounded w-full;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px rgb(212, 178, 87) inset !important;
+  box-shadow: 0 0 0px 1000px rgb(212, 178, 87, 0.7) inset !important;
+  -webkit-text-fill-color: theme("colors.white") !important;
+  color: theme("colors.white") !important;
+}
+
+input:focus {
+  outline: none;
+  border-color: theme("colors.custom-yellow-4");
 }

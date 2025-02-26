@@ -2,104 +2,105 @@
 
 import { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
+import { useDeleteHandler, useUpdateHandler } from "./AccountHander";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { passwordSchema } from "./AccountSchema";
 
 export default function Security() {
   const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
-  const [isConfirmed, setIsConfirmed] = useState(false);
   const [input, setInput] = useState("");
-
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setPasswordData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const validatePassword = () => {
-    const { currentPassword, newPassword, confirmPassword } = passwordData;
-    if (newPassword.length < 8)
-      return "New password must be at least 8 characters.";
-    if (newPassword === currentPassword)
-      return "New password cannot be the same as the old password.";
-    if (newPassword !== confirmPassword) return "Passwords do not match.";
-    return "";
-  };
-
-  const handlePasswordSubmit = async () => {
-    const error = validatePassword();
-    if (error) {
-      alert(error);
-      return;
-    }
-    try {
-      console.log("Password changed successfully!");
-      setPasswordData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-    } catch (error) {
-      console.error("Error updating password:", error);
-    }
-  };
+  const DeleteMeMutation = useDeleteHandler();
+  const updatePasswordMutation = useUpdateHandler();
 
   const handleDeleteAccount = async () => {
-    if (isConfirmed) {
-      try {
-        console.log("Account deleted.");
-        setDeletePopupOpen(false);
-      } catch (error) {
-        console.error("Error deleting account:", error);
-      }
-    }
+    DeleteMeMutation.mutate();
   };
 
   return (
-    <div className="w-full flex items-center justify-center p-6">
+    <div className="w-full flex items-center justify-center md:p-6">
       <div className="bg-white rounded-2xl w-full p-6">
-        <h2 className="text-3xl font-bold mb-6">Account Settings</h2>
+        <h2 className="text-3xl font-bold mb-6">Security Settings</h2>
         <div className="space-y-6">
           <h3 className="text-xl font-bold">Change Password</h3>
-          <div className="flex flex-col gap-4">
-            <input
-              type="password"
-              name="currentPassword"
-              placeholder="Current Password"
-              value={passwordData.currentPassword}
-              onChange={handlePasswordChange}
-              className="border border-gray-300 rounded-lg p-4 w-full"
-            />
-            <div className="flex gap-3">
-              <input
-                type="password"
-                name="newPassword"
-                placeholder="New Password"
-                value={passwordData.newPassword}
-                onChange={handlePasswordChange}
-                className="border border-gray-300 rounded-lg p-4 w-full"
-              />
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm New Password"
-                value={passwordData.confirmPassword}
-                onChange={handlePasswordChange}
-                className="border border-gray-300 rounded-lg p-4 w-full"
-              />
-            </div>
-            <button
-              onClick={handlePasswordSubmit}
-              className="w-[25%] bg-custom-yellow-4 text-white font-bold py-4 rounded-lg hover:bg-custom-yellow-4/80 transition-all"
-            >
-              Change Password
-            </button>
-          </div>
+
+          <Formik
+            initialValues={{
+              currentPassword: "",
+              newPassword: "",
+              confirmPassword: "",
+            }}
+            validationSchema={passwordSchema}
+            onSubmit={(values) => {
+              updatePasswordMutation.mutate({
+                oldPassword: values.currentPassword,
+                newPassword: values.newPassword,
+                passwordConfirm: values.confirmPassword,
+              });
+            }}
+          >
+            {({ isValid }) => (
+              <Form className="flex flex-col gap-4">
+                <div>
+                  <Field
+                    type="password"
+                    name="currentPassword"
+                    placeholder="Current Password"
+                    className="border border-gray-300 rounded-lg p-4 w-full"
+                  />
+                  <ErrorMessage
+                    name="currentPassword"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="w-full">
+                    <Field
+                      type="password"
+                      name="newPassword"
+                      placeholder="New Password"
+                      className="border border-gray-300 rounded-lg p-4 w-full"
+                    />
+                    <ErrorMessage
+                      name="newPassword"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
+
+                  <div className="w-full">
+                    <Field
+                      type="password"
+                      name="confirmPassword"
+                      placeholder="Confirm New Password"
+                      className="border border-gray-300 rounded-lg p-4 w-full"
+                    />
+                    <ErrorMessage
+                      name="confirmPassword"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={!isValid}
+                  className={`max-w-md w-full sm:w-[25%] font-bold py-4 rounded-lg transition-all text-white 
+                    ${
+                      isValid
+                        ? "bg-custom-yellow-4 hover:bg-custom-yellow-4/80"
+                        : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                >
+                  Change Password
+                </button>
+              </Form>
+            )}
+          </Formik>
         </div>
-        
+
         <div className="mt-12">
           <h3 className="text-xl font-bold">Account Deletion</h3>
           <div
@@ -113,8 +114,8 @@ export default function Security() {
       </div>
 
       {isDeletePopupOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg w-[40%] text-center">
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 p-4">
+          <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg w-full max-w-md sm:w-[40%] text-center">
             <h2 className="text-xl font-semibold text-red-500">
               Are you sure?
             </h2>

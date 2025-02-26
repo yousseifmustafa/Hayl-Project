@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useLogin, useLogout, useSync } from "@/Hooks/useAuth";
 import toast from "react-hot-toast";
+import { toastStyles } from "@/app/toastStyle";
 
 export const useLoginHandler = () => {
   const router = useRouter();
@@ -13,7 +14,9 @@ export const useLoginHandler = () => {
       sessionStorage.setItem("jwt", data?.token);
       const virtualCart = localStorage.getItem("virtualCart");
       const virtualWishlist = localStorage.getItem("virtualWishlist");
-      toast.success("Welcome back! Login successful.", {
+      toast.dismiss();
+      toast.success("Welcome back! You have successfully logged in.", {
+        style: toastStyles.success,
         position: "top-right",
         duration: 3000,
       });
@@ -24,11 +27,13 @@ export const useLoginHandler = () => {
       router.push("/");
     },
     onError: (error) => {
-      console.log("error", error);
-
+      toast.dismiss();
       const errorMessage =
-        error?.response?.data?.message || "Failed to log in. Please try again.";
-      toast.error(errorMessage, { position: "top-right" });
+        error?.response?.data?.message || "Login failed. Please try again.";
+      toast.error(errorMessage, {
+        style: toastStyles.error,
+        position: "top-right",
+      });
     },
   });
 
@@ -40,7 +45,9 @@ export const useLogoutHandler = () => {
 
   const logoutMutation = useLogout({
     onSuccess: () => {
-      toast.success("Logout successful.", {
+      toast.dismiss();
+      toast.success("You have successfully logged out.", {
+        style: toastStyles.success,
         position: "top-right",
         duration: 3000,
       });
@@ -53,12 +60,13 @@ export const useLogoutHandler = () => {
       router.push("/");
     },
     onError: (error) => {
-      console.log("error: ", error);
-
+      toast.dismiss();
       const errorMessage =
-        error?.response?.data?.message ||
-        "Failed to log out. Please try again.";
-      toast.error(errorMessage, { position: "top-right" });
+        error?.response?.data?.message || "Logout failed. Please try again.";
+      toast.error(errorMessage, {
+        style: toastStyles.error,
+        position: "top-right",
+      });
     },
   });
 

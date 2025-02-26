@@ -10,6 +10,7 @@ import {
   confirmEmail,
   validateResetOtp,
   regeneratePasswordOtp,
+  UpdatePassword,
 } from "../Api/Auth";
 
 export const useLogin = ({ onSuccess, onError }) => {
@@ -54,6 +55,14 @@ export const useForgetPassword = ({ onSuccess, onError }) => {
 export const useResetPassword = ({ onSuccess, onError }) => {
   return useMutation({
     mutationFn: ({ credentials, token }) => ResetPassword(credentials, token),
+    onSuccess,
+    onError,
+  });
+};
+export const useUpdatePassword = ({ onSuccess, onError }) => {
+  return useMutation({
+    mutationFn: (data) =>
+      UpdatePassword(data),
     onSuccess,
     onError,
   });

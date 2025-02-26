@@ -1,6 +1,7 @@
 "use Client";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { toastStyles } from "@/app/toastStyle";
 
 export const useVirtualWishlist = () => {
   const [refresh, setRefresh] = useState(false);
@@ -17,13 +18,16 @@ export const useVirtualWishlist = () => {
       Wishlist = Wishlist.filter((item) => item !== productId);
 
       localStorage.setItem("virtualWishlist", JSON.stringify(Wishlist));
-
-      toast.success("Item removed From Wishlist Successfully", {
+      toast.dismiss();
+      toast.success("Product removed from wishlist.", {
+        style: toastStyles.success,
         position: "top-right",
       });
     } else {
       Wishlist.push(productId);
-      toast.success("Item Added to Wishlist Successfully", {
+      toast.dismiss();
+      toast.success("Product added to wishlist.", {
+        style: toastStyles.success,
         position: "top-right",
       });
     }

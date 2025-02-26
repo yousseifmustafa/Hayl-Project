@@ -22,8 +22,7 @@ export default function Cart() {
     postalCode: "",
   });
 
-
-  if(!isAuthenticated) return <UnauthorizedCart/> 
+  if (!isAuthenticated) return <UnauthorizedCart />;
 
   const handleChange = useCallback((e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -115,6 +114,7 @@ export default function Cart() {
                 {view == "cart" ? (
                   <button
                     onClick={() => {
+                      window.scroll({ top: 0, behavior: "smooth" });
                       setView("Address");
                     }}
                     className="flex items-center  gap-3 hover:cursor-pointer rounded-lg shadow-sm

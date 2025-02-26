@@ -1,22 +1,30 @@
 import { useClearWishlist, useToggleWishlist } from "@/Hooks/useProducts";
 import toast from "react-hot-toast";
+import { toastStyles } from "@/app/toastStyle";
 
 export const toggleWishlistHandler = () => {
   const toggleWishlistMutation = useToggleWishlist({
     onSuccess: (data) => {
-      console.log("data :", data);
+      toast.dismiss();
+
       toast.success(data?.data?.message, {
+        style: toastStyles.success,
         position: "top-right",
         duration: 3000,
       });
     },
     onError: (error) => {
-      let errorMessage = "Error Happened";
-      if (error?.response?.data?.message == "Unauthorized: No token found") {
-        errorMessage = "Please Login First.";
+      let errorMessage = "An error occurred.";
+      if (error?.response?.data?.message === "Unauthorized: No token found") {
+        errorMessage = "Please log in first.";
       }
 
-      toast.error(errorMessage, { position: "top-right" });
+      toast.dismiss();
+
+      toast.error(errorMessage, {
+        style: toastStyles.error,
+        position: "top-right",
+      });
     },
   });
 
@@ -25,8 +33,11 @@ export const toggleWishlistHandler = () => {
 
 export const clearWishlistHandler = () => {
   const removeFromWishlistMutation = useClearWishlist({
-    onSuccess: (data) => {
-      toast.success("Your Wishlist is Empty Now!", {
+    onSuccess: () => {
+      toast.dismiss();
+
+      toast.success("Your wishlist is now empty!", {
+        style: toastStyles.success,
         position: "top-right",
         duration: 3000,
       });
@@ -34,8 +45,14 @@ export const clearWishlistHandler = () => {
     onError: (error) => {
       const errorMessage =
         error?.response?.data?.message ||
-        "Failed to Clear Wishlist . Please try again.";
-      toast.error(errorMessage, { position: "top-right" });
+        "Failed to clear wishlist. Please try again.";
+
+      toast.dismiss();
+
+      toast.error(errorMessage, {
+        style: toastStyles.error,
+        position: "top-right",
+      });
     },
   });
 

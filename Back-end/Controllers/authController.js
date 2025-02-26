@@ -39,7 +39,7 @@ const createSendToken = (user, statusCode, req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
     };
-    res.cookie("jwt", token, cookiesOption);
+    res?.cookie("jwt", token, cookiesOption);
 
     const sanitizedUser = user.toObject ? user.toObject() : { ...user };
     delete sanitizedUser.password;
@@ -279,6 +279,26 @@ exports.regeneratePasswordOTP = asyncWrapper(async (req, res) => {
   }
 
   res.status(200).json({ message: "A new OTP has been sent to your email." });
+});
+
+exports.updatePassword = asyncWrapper(async (req, res) => {
+  let id = req.user._id.toString();
+
+  const user = await User.findById(id).select("+password");
+
+  if (
+    !user ||
+    !(await user.correctPassword(req.body.oldPassword, user.password))
+  )
+    return res.status(401).json({ message: "Incorrect old password" });
+
+  if (req.body.newPassword !== req.body.passwordConfirm)
+    return res.status(400).json({ message: "Passwords do not match" });
+
+  user.password = req.body.newPassword;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  createSendToken(user, 200, req, res);
 });
 
 exports.logout = (req, res) => {

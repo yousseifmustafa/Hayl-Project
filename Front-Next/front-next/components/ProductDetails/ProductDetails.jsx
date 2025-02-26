@@ -10,26 +10,18 @@ import { toCartHandler } from "@/components/Cart/CartHandler";
 import { toggleWishlistHandler } from "../Wishlist/WishListHandler";
 import { useVirtualWishlist } from "@/Hooks/useVirtualWishlist";
 import { useVirtualCart } from "@/Hooks/useVirtualCart";
-import { getAuth } from "@/authDB";
+
 export default function ProductDetails() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [wishlist, setWishlist] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isAuthenticated = !!sessionStorage.getItem("jwt");
 
   const { toggleWishlist } = useVirtualWishlist();
   const toCartMutation = toCartHandler();
   const toggleWishlistMutation = toggleWishlistHandler();
   const { addToCart } = useVirtualCart();
   const { data: product, isLoading, isError } = useProductById(id);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const authData = await getAuth();
-      setIsAuthenticated(!!authData.token);
-    };
-    checkAuth();
-  }, []);
 
   const wishlistHandler = useCallback(
     (id) => {
@@ -94,21 +86,35 @@ export default function ProductDetails() {
           <div className="flex flex-col gap-2 mx-6">
             <div className="flex justify-between items-center mb-2 gap-3">
               <h1 className="text-2xl font-bold">
-                {isLoading ? <Skeleton width={200} /> : product?.name || "Unknown Product"}
+                {isLoading ? (
+                  <Skeleton width={200} />
+                ) : (
+                  product?.name || "Unknown Product"
+                )}
               </h1>
               <p className="text-lg font-bold">
-                {isLoading ? <Skeleton width={100} /> : product?.category || "No Category"}
+                {isLoading ? (
+                  <Skeleton width={100} />
+                ) : (
+                  product?.category || "No Category"
+                )}
               </p>
             </div>
 
             <p className="text-2xl font-bold mt-4">
-              {isLoading ? <Skeleton count={3} /> : product?.description || "No description available."}
+              {isLoading ? (
+                <Skeleton count={3} />
+              ) : (
+                product?.description || "No description available."
+              )}
             </p>
 
             {isLoading ? (
               <Skeleton width={120} height={30} />
             ) : productPriceDetails?.discount <= 0 ? (
-              <p className="text-2xl font-bold mt-4">EGP {productPriceDetails?.price}</p>
+              <p className="text-2xl font-bold mt-4">
+                EGP {productPriceDetails?.price}
+              </p>
             ) : (
               <div className="flex flex-col gap-3">
                 <p className="text-gray-500 line-through text-lg">
@@ -116,10 +122,16 @@ export default function ProductDetails() {
                 </p>
                 <p className="text-2xl font-bold text-black">
                   Now: EGP {productPriceDetails?.priceAfterSale?.toFixed(2)}
-                  <span className="text-gray-500 text-sm"> Inclusive of VAT</span>
+                  <span className="text-gray-500 text-sm">
+                    {" "}
+                    Inclusive of VAT
+                  </span>
                 </p>
                 <p className="text-gray-700 text-lg font-semibold flex gap-3 items-center">
-                  Saving: <span className="text-black">EGP {productPriceDetails?.saving}</span>
+                  Saving:{" "}
+                  <span className="text-black">
+                    EGP {productPriceDetails?.saving}
+                  </span>
                   <span className="bg-green-200 text-green-800 px-2 py-1 text-sm rounded-md">
                     {productPriceDetails?.discount}% Off
                   </span>
@@ -137,7 +149,13 @@ export default function ProductDetails() {
                     hover:bg-custom-yellow-4/80 transition-all duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50"
                   disabled={toCartMutation.isLoading || isLoading}
                 >
-                  {toCartMutation.isLoading ? "Adding..." : isLoading ? <Skeleton width={100} /> : "ADD TO CART"}
+                  {toCartMutation.isLoading ? (
+                    "Adding..."
+                  ) : isLoading ? (
+                    <Skeleton width={100} />
+                  ) : (
+                    "ADD TO CART"
+                  )}
                 </button>
               </div>
             </div>
@@ -151,7 +169,9 @@ export default function ProductDetails() {
                 disabled={isLoading}
               >
                 <FaRegHeart className="text-xl" />
-                <p className="text-sm md:text-lg">{!wishlist ? "Add to Wishlist" : "Remove From Wishlist"}</p>
+                <p className="text-sm md:text-lg">
+                  {!wishlist ? "Add to Wishlist" : "Remove From Wishlist"}
+                </p>
               </button>
 
               <div className="flex items-center justify-center gap-1 w-1/4">
@@ -163,7 +183,9 @@ export default function ProductDetails() {
                   -
                 </button>
 
-                <span className="md:text-lg text-sm font-semibold px-4 py-2">{quantity}</span>
+                <span className="md:text-lg text-sm font-semibold px-4 py-2">
+                  {quantity}
+                </span>
 
                 <button
                   onClick={() => setQuantity((prev) => Math.min(99, prev + 1))}

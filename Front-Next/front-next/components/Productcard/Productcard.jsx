@@ -52,7 +52,9 @@ export default function ProductCard({ product, wish, setWish }) {
   );
 
   return (
-    <div className="transition-all w-52 h-[380px] overflow-hidden bg-white shadow-md rounded-lg p-3 border flex flex-col items-start justify-between relative">
+    // <div className="transition-all   w-[48%] md:w-52 h-[380px] overflow-hidden bg-white shadow-md rounded-lg p-3 border flex flex-col items-start justify-between relative">
+
+     <div className="transition-all w-48 md:w-52  h-[380px] overflow-hidden bg-white shadow-md rounded-lg p-3 border flex flex-col items-start justify-between relative"> 
       <div className="relative overflow-hidden flex items-center justify-center group w-full h-[70%]">
         <Image
           src={product?.image}

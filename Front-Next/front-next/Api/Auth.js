@@ -76,6 +76,34 @@ export const ResetPassword = async (credentials) => {
   return data;
 };
 
+export const UpdatePassword = async ({
+  oldPassword,
+  newPassword,
+  passwordConfirm,
+}) => {
+  const token = sessionStorage.getItem("jwt");
+
+  console.log(
+    "ana el Update Validation : ",
+    oldPassword,
+    newPassword,
+    passwordConfirm
+  );
+
+  const { data } = await axios.patch(
+    `${BASE_URL}/updatePassword`,
+    { oldPassword, newPassword, passwordConfirm },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    }
+  );
+  return data;
+};
+
 export const confirmEmail = async ({ email, otpCode }) => {
   const { data } = await axios.post(
     `${BASE_URL}/confirmEmail`,

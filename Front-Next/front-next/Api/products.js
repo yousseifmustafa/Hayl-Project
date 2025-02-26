@@ -98,6 +98,9 @@ export const clearCart = async () => {
   return response;
 };
 
+
+
+
 export const toCart = async (data) => {
   const token = sessionStorage.getItem("jwt");
 

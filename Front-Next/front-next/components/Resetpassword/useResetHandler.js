@@ -6,48 +6,31 @@ import {
   useValidateResetOtp,
   useRegeneratePasswordOtp,
 } from "@/Hooks/useAuth";
+import { toastStyles } from "@/app/toastStyle";
 
 export const useForgetHandler = () => {
   const router = useRouter();
 
   const ForgetPasswordMutation = useForgetPassword({
     onSuccess: (data) => {
-      console.log(data);
-
+      toast.dismiss();
       sessionStorage.setItem("email", data);
       router.push("/ResetValidate");
-      toast.success("Password reset OTP sent", {
+      toast.success("A password reset OTP has been sent.", {
         position: "top-right",
         duration: 6000,
-        style: {
-          background: "#28a745",
-          color: "#fff",
-          borderRadius: "10px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          padding: "20px 40px",
-          fontSize: "18px",
-          fontWeight: "700",
-          maxWidth: "500px",
-          animation: "slideIn 0.5s ease-out",
-        },
+        style: toastStyles.success,
       });
     },
     onError: (error) => {
+      toast.dismiss();
       toast.error(
-        `${error?.response?.data?.message || "No user with this email"}`,
+        `${
+          error?.response?.data?.message || "No account found with this email."
+        }`,
         {
           position: "top-right",
-          style: {
-            background: "#dc3545",
-            color: "#fff",
-            borderRadius: "10px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            padding: "20px 40px",
-            fontSize: "18px",
-            fontWeight: "700",
-            maxWidth: "500px",
-            animation: "slideIn 0.5s ease-out",
-          },
+          style: toastStyles.error,
         }
       );
     },
@@ -61,47 +44,28 @@ export const useResetHandler = () => {
   const ResetPasswordMutation = useResetPassword({
     onSuccess: (data) => {
       sessionStorage.removeItem("email");
-
+      toast.dismiss();
       router.push("/login");
       toast.success(
-        data?.response?.data?.message || "Password Changed successfully ",
+        data?.response?.data?.message ||
+          "Your password has been successfully changed.",
         {
           position: "top-right",
           duration: 6000,
-          style: {
-            background: "#28a745",
-            color: "#fff",
-            borderRadius: "10px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            padding: "20px 40px",
-            fontSize: "18px",
-            fontWeight: "700",
-            maxWidth: "500px",
-            animation: "slideIn 0.5s ease-out",
-          },
+          style: toastStyles.success,
         }
       );
-      router.push("/Login");
     },
     onError: (error) => {
-      router.push("/login");
-      console.log("error : ", error);
-
+      toast.dismiss();
       toast.error(
-        `${error?.response?.data?.message || "Sorry There is an Error Occur"}`,
+        `${
+          error?.response?.data?.message ||
+          "An error occurred. Please try again."
+        }`,
         {
           position: "top-right",
-          style: {
-            background: "#dc3545",
-            color: "#fff",
-            borderRadius: "10px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            padding: "20px 40px",
-            fontSize: "18px",
-            fontWeight: "700",
-            maxWidth: "500px",
-            animation: "slideIn 0.5s ease-out",
-          },
+          style: toastStyles.error,
         }
       );
     },
@@ -113,26 +77,19 @@ export const useResetHandler = () => {
 export const useRegeneratePasswordOtpHandler = () => {
   const useRegeneratePasswordOtpMutation = useRegeneratePasswordOtp({
     onSuccess: (data) => {
+      toast.dismiss();
       toast.success(
-        data?.response?.data?.message || "OTP has been sent successfully.",
+        data?.response?.data?.message ||
+          "A new OTP has been sent successfully.",
         {
           position: "top-right",
           duration: 6000,
-          style: {
-            background: "#28a745",
-            color: "#fff",
-            borderRadius: "10px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            padding: "20px 40px",
-            fontSize: "18px",
-            fontWeight: "700",
-            maxWidth: "500px",
-            animation: "slideIn 0.5s ease-out",
-          },
+          style: toastStyles.success,
         }
       );
     },
     onError: (error) => {
+      toast.dismiss();
       toast.error(
         `${
           error?.response?.data?.message ||
@@ -140,17 +97,7 @@ export const useRegeneratePasswordOtpHandler = () => {
         }`,
         {
           position: "top-right",
-          style: {
-            background: "#dc3545",
-            color: "#fff",
-            borderRadius: "10px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            padding: "20px 40px",
-            fontSize: "18px",
-            fontWeight: "700",
-            maxWidth: "500px",
-            animation: "slideIn 0.5s ease-out",
-          },
+          style: toastStyles.error,
         }
       );
     },
@@ -161,42 +108,23 @@ export const useRegeneratePasswordOtpHandler = () => {
 
 export const useValidateResetOtpHandler = () => {
   const router = useRouter();
-
   const ValidateResetOtpMutation = useValidateResetOtp({
     onSuccess: () => {
+      toast.dismiss();
       router.push("/resetPassword");
-      toast.success("Valid OTP.", {
+      toast.success("OTP verified successfully.", {
         position: "top-right",
         duration: 6000,
-        style: {
-          background: "#28a745",
-          color: "#fff",
-          borderRadius: "10px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          padding: "20px 40px",
-          fontSize: "18px",
-          fontWeight: "700",
-          maxWidth: "500px",
-          animation: "slideIn 0.5s ease-out",
-        },
+        style: toastStyles.success,
       });
     },
     onError: (error) => {
+      toast.dismiss();
       toast.error(
         `${error?.response?.data?.message || "Invalid OTP. Please try again."}`,
         {
           position: "top-right",
-          style: {
-            background: "#dc3545",
-            color: "#fff",
-            borderRadius: "10px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            padding: "20px 40px",
-            fontSize: "18px",
-            fontWeight: "700",
-            maxWidth: "500px",
-            animation: "slideIn 0.5s ease-out",
-          },
+          style: toastStyles.error,
         }
       );
     },

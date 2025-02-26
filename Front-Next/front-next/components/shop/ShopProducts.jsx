@@ -16,7 +16,7 @@ export default function ProductSlider({
   const { data, isLoading, isError } = searchTerm
     ? useSearch(searchTerm, sort, limit, page)
     : categoryTerm
-    ? useProducts(categoryTerm , sort, limit, page)
+    ? useProducts(categoryTerm, sort, limit, page)
     : useProducts(category, sort, limit, page);
 
   const products = useMemo(() => data?.products || [], [data]);
@@ -36,13 +36,15 @@ export default function ProductSlider({
   }
 
   return (
-    <div className="flex flex-wrap justify-center gap-4 my-2 max-w-[1200px] mx-auto">
+    <div className="grid grid-cols-2  lg:container  md:grid-cols-3 w-[1000px]:grid-col-4 lg:grid-cols-5  gap-4 my-2 max-w-[1200px] m-auto">
       {products.length > 0 ? (
         products.map((product, index) => (
           <ProductCard key={index} product={product} />
         ))
       ) : (
-        <p className="text-gray-500">No products available.</p>
+        <p className="text-gray-500 col-span-full text-center">
+          No products available.
+        </p>
       )}
     </div>
   );

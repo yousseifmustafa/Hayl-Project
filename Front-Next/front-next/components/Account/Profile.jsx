@@ -27,29 +27,32 @@ export default function Profile() {
   });
 
   return (
-    <div className="w-full flex items-center justify-center p-6">
-      <div className="bg-white rounded-2xl w-full p-6">
-        <h2 className="text-3xl font-bold mb-6 text-start">Profile Info</h2>
+    <div className="w-full flex items-center justify-center p-4 sm:p-6">
+      <div className="bg-white rounded-2xl w-full max-w-3xl p-4 sm:p-6">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-start">
+          Profile Info
+        </h2>
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           <div className="flex flex-col">
             <label htmlFor="email" className="mb-2 text-gray-700">
               Email
             </label>
             <input
-              className="border border-gray-300 rounded-lg p-4 w-full"
+              className="border border-gray-300 rounded-lg p-3 sm:p-4 w-full"
               type="email"
               disabled
               id="email"
+              {...formik.getFieldProps("email")}
             />
           </div>
 
-          <div className="flex space-x-4">
-            <div className="flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
               <label htmlFor="FirstName" className="mb-2 text-gray-700">
                 First Name
               </label>
               <input
-                className="border border-gray-300 rounded-lg p-4 w-full"
+                className="border border-gray-300 rounded-lg p-3 sm:p-4 w-full"
                 type="text"
                 id="FirstName"
                 {...formik.getFieldProps("FirstName")}
@@ -61,12 +64,12 @@ export default function Profile() {
               )}
             </div>
 
-            <div className="flex-1">
+            <div>
               <label htmlFor="LastName" className="mb-2 text-gray-700">
                 Last Name
               </label>
               <input
-                className="border border-gray-300 rounded-lg p-4 w-full"
+                className="border border-gray-300 rounded-lg p-3 sm:p-4 w-full"
                 type="text"
                 id="LastName"
                 {...formik.getFieldProps("LastName")}
@@ -80,13 +83,13 @@ export default function Profile() {
           </div>
 
           {/* Phone & Gender Fields */}
-          <div className="flex gap-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
               <label htmlFor="phone" className="mb-2 text-gray-700">
                 Phone Number
               </label>
               <input
-                className="border border-gray-300 rounded-lg p-4 w-full"
+                className="border border-gray-300 rounded-lg p-3 sm:p-4 w-full"
                 type="text"
                 id="phone"
                 {...formik.getFieldProps("phone")}
@@ -100,10 +103,10 @@ export default function Profile() {
 
             <div>
               <label className="mb-2 text-gray-700">Gender</label>
-              <div className="flex space-x-4">
+              <div className="flex flex-wrap gap-4">
                 <button
                   type="button"
-                  className={`p-4 w-32 rounded-lg border font-bold hover:cursor-pointer ${
+                  className={`p-3 sm:p-4 w-full md:w-32 rounded-lg border font-bold hover:cursor-pointer ${
                     formik.values.gender === "male"
                       ? "main-bg-color text-white"
                       : "bg-gray-200"
@@ -114,7 +117,7 @@ export default function Profile() {
                 </button>
                 <button
                   type="button"
-                  className={`p-4 w-32 rounded-lg border font-bold hover:cursor-pointer ${
+                  className={`p-3 sm:p-4 w-full md:w-32 rounded-lg border font-bold hover:cursor-pointer ${
                     formik.values.gender === "female"
                       ? "main-bg-color text-white"
                       : "bg-gray-200"
@@ -134,9 +137,9 @@ export default function Profile() {
 
           <button
             type="submit"
-            className={`w-full p-4 rounded-lg text-white font-bold ${
+            className={`w-full p-3 sm:p-4 rounded-lg text-white font-bold transition-all ${
               formik.dirty && formik.isValid
-                ? "main-bg-color hover:cursor-pointer"
+                ? "main-bg-color hover:opacity-90 hover:cursor-pointer"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
             disabled={!(formik.dirty && formik.isValid)}
