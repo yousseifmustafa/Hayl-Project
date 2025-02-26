@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { FaRegHeart } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
@@ -11,8 +11,10 @@ import { toggleWishlistHandler } from "../Wishlist/WishListHandler";
 import { useVirtualWishlist } from "@/Hooks/useVirtualWishlist";
 import { useVirtualCart } from "@/Hooks/useVirtualCart";
 
-export default function ProductDetails() {
-  const { id } = useParams();
+export default function ProductDetails({ id }) {
+  const params = useParams();
+  const productId = id ?? params.id;
+
   const [quantity, setQuantity] = useState(1);
   const [wishlist, setWishlist] = useState(false);
   const isAuthenticated = !!sessionStorage.getItem("jwt");
@@ -21,19 +23,16 @@ export default function ProductDetails() {
   const toCartMutation = toCartHandler();
   const toggleWishlistMutation = toggleWishlistHandler();
   const { addToCart } = useVirtualCart();
-  const { data: product, isLoading, isError } = useProductById(id);
+  const { data: product, isLoading, isError } = useProductById(productId);
 
-  const wishlistHandler = useCallback(
-    (id) => {
-      if (isAuthenticated) {
-        toggleWishlistMutation.mutate(product._id || id);
-      } else {
-        toggleWishlist(product._id || id);
-      }
-      setWishlist((prev) => !prev);
-    },
-    [toggleWishlistMutation, toggleWishlist, isAuthenticated, product]
-  );
+  const wishlistHandler = useCallback(() => {
+    if (isAuthenticated) {
+      toggleWishlistMutation.mutate(product._id);
+    } else {
+      toggleWishlist(product._id);
+    }
+    setWishlist((prev) => !prev);
+  }, [toggleWishlistMutation, toggleWishlist, isAuthenticated, product]);
 
   const cartHandler = useCallback(() => {
     if (isAuthenticated) {
@@ -73,7 +72,7 @@ export default function ProductDetails() {
                 height={500}
                 width={500}
                 className="w-full bg-gray-200 object-cover rounded-lg"
-                priority={id === "1"}
+                priority={productId === "1"}
                 loading="lazy"
               />
             </div>
@@ -86,27 +85,15 @@ export default function ProductDetails() {
           <div className="flex flex-col gap-2 mx-6">
             <div className="flex justify-between items-center mb-2 gap-3">
               <h1 className="text-2xl font-bold">
-                {isLoading ? (
-                  <Skeleton width={200} />
-                ) : (
-                  product?.name || "Unknown Product"
-                )}
+                {isLoading ? <Skeleton width={200} /> : product?.name}
               </h1>
               <p className="text-lg font-bold">
-                {isLoading ? (
-                  <Skeleton width={100} />
-                ) : (
-                  product?.category || "No Category"
-                )}
+                {isLoading ? <Skeleton width={100} /> : product?.category}
               </p>
             </div>
 
             <p className="text-2xl font-bold mt-4">
-              {isLoading ? (
-                <Skeleton count={3} />
-              ) : (
-                product?.description || "No description available."
-              )}
+              {isLoading ? <Skeleton count={3} /> : product?.description}
             </p>
 
             {isLoading ? (
@@ -128,7 +115,7 @@ export default function ProductDetails() {
                   </span>
                 </p>
                 <p className="text-gray-700 text-lg font-semibold flex gap-3 items-center">
-                  Saving:{" "}
+                  Saving:
                   <span className="text-black">
                     EGP {productPriceDetails?.saving}
                   </span>
@@ -149,13 +136,7 @@ export default function ProductDetails() {
                     hover:bg-custom-yellow-4/80 transition-all duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50"
                   disabled={toCartMutation.isLoading || isLoading}
                 >
-                  {toCartMutation.isLoading ? (
-                    "Adding..."
-                  ) : isLoading ? (
-                    <Skeleton width={100} />
-                  ) : (
-                    "ADD TO CART"
-                  )}
+                  {toCartMutation.isLoading ? "Adding..." : "ADD TO CART"}
                 </button>
               </div>
             </div>

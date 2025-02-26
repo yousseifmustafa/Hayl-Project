@@ -25,6 +25,18 @@ export const getAddress = async () => {
 
   return response?.data?.data;
 };
+export const defaultAddress = async () => {
+  const token = sessionStorage.getItem("jwt");
+  const response = await axios.get(`${BASE_URL}/defaultAddress`, {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response?.data?.data;
+};
 
 export const removeAddress = async (id) => {
   const token = sessionStorage.getItem("jwt");

@@ -22,15 +22,13 @@ export default function ProductsManagement() {
   const [showFilters, setShowFilters] = useState(false);
   const [id, setId] = useState(null);
   const [view, setView] = useState("discover");
-  const [totalPages, setTotalPages] = useState(1); 
-  const [searchTerm, setSearchTerm] = useState("")
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const { data, isLoading, isError } = searchTerm
-  ? useSearch(searchTerm) 
-  : useProducts(filters.category, sort, limit, page);
+  const { data } = searchTerm
+    ? useSearch(searchTerm)
+    : useProducts(filters.category, sort, limit, page);
 
-  console.log("Searchterm",searchTerm);
-  
   const handleTempFilterChange = (key, value) => {
     setTempFilters((prev) => {
       if (key === "category") {
@@ -68,7 +66,7 @@ export default function ProductsManagement() {
 
   useEffect(() => {
     if (data?.totalPages) {
-      setTotalPages(data.totalPages); 
+      setTotalPages(data.totalPages);
     }
   }, [data?.totalPages]);
 
@@ -101,17 +99,17 @@ export default function ProductsManagement() {
         setEntries={setLimit}
         setSearchTerm={setSearchTerm}
       />
-      
+
       <ProductList
         displayedProducts={data?.products || []}
         setView={setView}
         setId={setId}
       />
-      
+
       <PaginationControls
         currentPage={page}
         setCurrentPage={setPage}
-        totalPages={totalPages} 
+        totalPages={totalPages}
       />
     </div>
   );

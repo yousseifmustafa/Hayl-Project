@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   addAddress,
+  defaultAddress,
   DeleteMe,
   editAddress,
   getAddress,
@@ -21,6 +22,12 @@ export const useAddress = () => {
   return useQuery({
     queryKey: ["Address"],
     queryFn: getAddress,
+  });
+};
+export const useDefault = () => {
+  return useQuery({
+    queryKey: ["defaultAddress"],
+    queryFn: defaultAddress,
   });
 };
 

@@ -22,7 +22,8 @@ const ShopControls = ({
   const handleSortChange = useCallback(
     (e) => {
       setTempSort(e.target.value);
-      setPage(1); },
+      setPage(1);
+    },
     [setTempSort, setPage]
   );
 
@@ -52,11 +53,10 @@ const ShopControls = ({
             <option value="">Select</option>
             <option value="-price">High to Low</option>
             <option value="price">Low to High</option>
-            <option value="-created_at">Newest</option>
+            <option value="-createdAt">Newest</option>
           </select>
         </div>
       </div>
-
       <div>
         <Link href={"/shop"}>
           <button

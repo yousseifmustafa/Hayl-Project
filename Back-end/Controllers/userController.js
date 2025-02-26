@@ -154,9 +154,7 @@ exports.setDefaultAddress = asyncWrapper(async (req, res) => {
     return res.status(404).json({ message: "User not found" });
   }
 
-  const addressExists = user.address.some(
-    (addr) => addr._id.toString() === id
-  );
+  const addressExists = user.address.some((addr) => addr._id.toString() === id);
   if (!addressExists) {
     return res.status(404).json({ message: "Address not found" });
   }
@@ -182,10 +180,15 @@ exports.getDefaultAddress = asyncWrapper(async (req, res) => {
   }
 
   const address = user.address.find((addr) => addr.isDefault === true);
-
-  res.status(200).json({
-    data: address,
-  });
+  if (!address) {
+    res.status(404).json({
+      message: "No Default Address Found",
+    });
+  } else {
+    res.status(200).json({
+      data: address,
+    });
+  }
 });
 
 exports.updateAddress = asyncWrapper(async (req, res) => {

@@ -39,10 +39,10 @@ export const passwordSchema = yup.object().shape({
     .required("Confirm password is required"),
 });
 
-
 export const AddressSchema = yup.object().shape({
   name: yup.string().required("Full Name is required"),
-  phone: yup.string()
+  phone: yup
+    .string()
     .matches(
       /^(\+20|0)1[0-9]{9}$/,
       "Please enter a valid Egyptian phone number"
@@ -53,7 +53,8 @@ export const AddressSchema = yup.object().shape({
   building: yup.string().required("Building is required"),
   city: yup.string().required("City is required"),
   state: yup.string().required("State is required"),
-  postalCode: yup.number()
+  postalCode: yup
+    .number()
     .typeError("Postal Code must be a number")
     .required("Postal Code is required"),
   isDefault: yup.boolean(),

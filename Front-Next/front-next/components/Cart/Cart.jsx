@@ -13,12 +13,13 @@ export default function Cart() {
   const cartItems = data?.data?.data;
   const isAuthenticated = !!sessionStorage.getItem("jwt");
   const [formData, setFormData] = useState({
-    fullName: "",
+    name: "",
     phone: "",
+    department: "",
     Street: "",
     Building: "",
     city: "",
-    State: "",
+    state: "",
     postalCode: "",
   });
 
@@ -84,6 +85,7 @@ export default function Cart() {
               formData={formData}
               handleChange={handleChange}
               setView={setView}
+              setFormData={setFormData}
             />
           )}
           <div className="w-full lg:w-1/3  mt-3">

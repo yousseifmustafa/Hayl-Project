@@ -36,16 +36,18 @@ export default function ProductSlider({
   }
 
   return (
-    <div className="grid grid-cols-2  lg:container  md:grid-cols-3 w-[1000px]:grid-col-4 lg:grid-cols-5  gap-4 my-2 max-w-[1200px] m-auto">
-      {products.length > 0 ? (
-        products.map((product, index) => (
-          <ProductCard key={index} product={product} />
-        ))
-      ) : (
-        <p className="text-gray-500 col-span-full text-center">
-          No products available.
-        </p>
-      )}
+    <div className=" flex md:w-[90%]  m-auto items-center  justify-center">
+      <div className="grid grid-cols-2   md:grid-cols-3 w-[1000px]:grid-col-4 lg:grid-cols-5  gap-6 my-2 ">
+        {products.length > 0 ? (
+          products.map((product, index) => (
+            <ProductCard key={index} product={product} />
+          ))
+        ) : (
+          <p className="text-gray-500 col-span-full text-center">
+            No products available.
+          </p>
+        )}
+      </div>
     </div>
   );
 }
