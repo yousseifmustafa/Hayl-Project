@@ -3,8 +3,15 @@
 import Image from "next/image";
 import { MdOutlineDelete, MdOutlineEdit } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
+import { DeleteProductHandler } from "./mangeProductHandler";
 
 export default function ProductList({ displayedProducts, setView, setId }) {
+  const deleteProductMutation = DeleteProductHandler();
+
+  const ClearHandler = (id) => {
+    deleteProductMutation.mutate(id);
+  };
+
   return (
     <table className="w-full">
       <thead>
@@ -52,8 +59,6 @@ export default function ProductList({ displayedProducts, setView, setId }) {
                 <td className="flex items-center gap-3">
                   <button
                     onClick={() => {
-                      console.log("ana el id  " , _id);
-                      
                       setView("edit");
                       setId(_id);
                     }}
@@ -63,7 +68,7 @@ export default function ProductList({ displayedProducts, setView, setId }) {
                   </button>
                   <button
                     onClick={() => {
-                      setView("delete");
+                      ClearHandler(_id);
                       setId(_id);
                     }}
                     className="p-2 bg-gray-300 text-red-600 rounded-full hover:cursor-pointer"

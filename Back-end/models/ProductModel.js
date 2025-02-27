@@ -71,7 +71,7 @@ const productSchema = mongoose.Schema(
       required: [true, "Image is required"],
       validate: {
         validator: function (v) {
-          return validator.isURL(v) && /\.(jpeg|jpg|png|gif)$/i.test(v);
+          return validator.isURL(v) && /\.(jpeg|jpg|png|gif|webp)$/i.test(v);
         },
         message:
           "The image must be a valid URL and have a valid image file extension (jpeg, jpg, png, gif)",

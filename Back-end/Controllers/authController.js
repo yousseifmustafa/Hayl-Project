@@ -294,6 +294,11 @@ exports.updatePassword = asyncWrapper(async (req, res) => {
 
   if (req.body.newPassword !== req.body.passwordConfirm)
     return res.status(400).json({ message: "Passwords do not match" });
+  if (req.body.oldPassword == req.body.newPassword) {
+    return res
+      .status(400)
+      .json({ message: "Old password cannot be the same as the new one." });
+  }
 
   user.password = req.body.newPassword;
   user.passwordConfirm = req.body.passwordConfirm;

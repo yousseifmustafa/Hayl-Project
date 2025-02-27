@@ -6,7 +6,6 @@ import ProductList from "./ProductList";
 import ProductActions from "./ProductActions";
 import PaginationControls from "./PaginationControl";
 import ProductDetails from "../../ProductDetails/ProductDetails";
-import DeleteProduct from "./DeleteProduct";
 import AddProduct from "./AddProduct";
 import ImportFile from "./ImportFile";
 import EditProduct from "./EditProduct";
@@ -85,7 +84,6 @@ export default function ProductsManagement() {
         </button>
         {view === "preview" && <ProductDetails id={id} />}
         {view === "edit" && <EditProduct id={id} />}
-        {view === "delete" && <DeleteProduct id={id} setView={setView} />}
         {view === "ImportFile" && <ImportFile id={id} setView={setView} />}
         {view === "add" && <AddProduct />}
       </div>

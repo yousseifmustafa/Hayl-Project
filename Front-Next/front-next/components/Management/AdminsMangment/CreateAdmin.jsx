@@ -24,7 +24,9 @@ export default function CreateAdmin({ onCreate, onCancel }) {
       id: `#A${Math.floor(1000 + Math.random() * 9000)}`,
       ...formData,
       status: "Active",
-      avatar: `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 20)}.jpg`,
+      avatar: `https://randomuser.me/api/portraits/men/${Math.floor(
+        Math.random() * 20
+      )}.jpg`,
     };
 
     onCreate(newAdmin);
@@ -51,18 +53,61 @@ export default function CreateAdmin({ onCreate, onCancel }) {
       <h2 className="text-2xl font-semibold mb-4">Create New Admin</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} className="border p-2 rounded-md w-full" />
-        <input type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} className="border p-2 rounded-md w-full" />
-        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="border p-2 rounded-md w-full" />
-        <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} className="border p-2 rounded-md w-full" />
-        <input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} className="border p-2 rounded-md w-full" />
+        <input
+          type="text"
+          name="firstName"
+          placeholder="First Name"
+          value={formData.firstName}
+          onChange={handleChange}
+          className="border p-2 rounded-md w-full"
+        />
+        <input
+          type="text"
+          name="lastName"
+          placeholder="Last Name"
+          value={formData.lastName}
+          onChange={handleChange}
+          className="border p-2 rounded-md w-full"
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="border p-2 rounded-md w-full"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          className="border p-2 rounded-md w-full"
+        />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          className="border p-2 rounded-md w-full"
+        />
 
-        <select name="role" value={formData.role} onChange={handleChange} className="border p-2 rounded-md w-full">
+        <select
+          name="role"
+          value={formData.role}
+          onChange={handleChange}
+          className="border p-2 rounded-md w-full"
+        >
           <option value="Admin">Admin</option>
           <option value="Owner">Owner</option>
         </select>
 
-        <button type="submit" className="bg-orange-500 text-white px-4 py-2 rounded-md w-full">
+        <button
+          type="submit"
+          className="bg-custom-yellow-4 text-white px-4 py-2 rounded-md w-full"
+        >
           Create
         </button>
       </form>

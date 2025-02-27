@@ -1,48 +1,7 @@
 const Product = require("../Models/ProductModel");
 const APIFeatures = require("../utils/apiFeatures");
 const asyncWrapper = require("../middlewares/asyncWrapper");
-
-// exports.getProducts = asyncWrapper(async (req, res) => {
-//   let products = await Product.find();
-
-//   if (req.query.category) {
-//     const categories = req.query.category
-//       .split(",")
-//       .map((c) => c.trim().toLowerCase());
-
-//     products = products.filter((product) =>
-//       categories.includes(product.category.toLowerCase())
-//     );
-//   }
-
-//   if (req.query.ids) {
-//     const requestedIds = req.query.ids.split(",").map((id) => id.trim());
-//     products = products.filter((product) =>
-//       requestedIds.includes(product._id.toString())
-//     );
-//   }
-
-//   const totalProducts = products.length;
-//   const limit = Number(req.query.limit) || 50;
-//   const page = Number(req.query.page) || 1;
-//   const totalPages = Math.ceil(totalProducts / limit);
-//   const skip = (page - 1) * limit;
-//   const paginatedProducts = products.slice(skip, skip + limit);
-
-//   const pagination = {
-//     totalProducts,
-//     totalPages,
-//     currentPage: page,
-//     pageSize: limit,
-//   };
-
-//   res.status(200).json({
-//     status: "success",
-//     length: paginatedProducts.length,
-//     data: { products: paginatedProducts },
-//     pagination,
-//   });
-// });
+const { deleteImageFromCloudinary } = require("../utils/imageUpload");
 
 exports.getProducts = asyncWrapper(async (req, res) => {
   let query = Product.find();
@@ -165,15 +124,10 @@ exports.addProduct = asyncWrapper(async (req, res) => {
   });
 });
 
-exports.updateProduct = asyncWrapper(async (req, res) => {
+exports.uploadProductImage = asyncWrapper(async (req, res) => {
   const { _id } = req.params;
 
-  if (req.file) {
-    req.body.image = req.file.path;
-  }
-
-  const product = await Product.findByIdAndUpdate(_id, req.body, { new: true });
-
+  const product = await Product.findById(_id);
   if (!product) {
     return res.status(404).json({
       status: "fail",
@@ -181,19 +135,73 @@ exports.updateProduct = asyncWrapper(async (req, res) => {
     });
   }
 
+  if (!req.file || !req.file.path) {
+    return res.status(400).json({
+      status: "fail",
+      message: "No image uploaded",
+    });
+  }
+
+  if (product.image) {
+    await deleteImageFromCloudinary(product.image);
+  }
+
+  const updatedProduct = await Product.findByIdAndUpdate(
+    _id,
+    { image: req.file.path },
+    { new: true }
+  );
+
   res.status(200).json({
     status: "success",
-    message: "Product updated successfully",
-    data: { product },
+    message: "Image uploaded successfully",
+    data: updatedProduct,
+  });
+});
+
+exports.deleteProductImage = asyncWrapper(async (req, res) => {
+  const { _id } = req.params;
+
+  const product = await Product.findById(_id);
+  if (!product) {
+    return res.status(404).json({
+      status: "fail",
+      message: "Product not found",
+    });
+  }
+
+  if (!product.image) {
+    return res.status(400).json({
+      status: "fail",
+      message: "No image found for this product",
+    });
+  }
+
+  await deleteImageFromCloudinary(product.image);
+  await Product.findByIdAndUpdate(_id, { image: null }, { new: true });
+
+  res.status(200).json({
+    status: "success",
+    message: "Image deleted successfully",
   });
 });
 
 exports.deleteProduct = asyncWrapper(async (req, res) => {
   const { _id } = req.params;
 
-  const deletedProduct = await Product.findByIdAndDelete(_id);
-
+  const deletedProduct = await Product.findById(_id);
   if (!deletedProduct) {
+    return res.status(404).json({
+      status: "fail",
+      message: "Product not found",
+    });
+  }
+
+  await deleteImageFromCloudinary(deletedProduct.image);
+
+  const isFound = await Product.findByIdAndDelete(_id);
+
+  if (!isFound) {
     return res.status(404).json({
       status: "fail",
       message: "Product not found",
@@ -203,6 +211,42 @@ exports.deleteProduct = asyncWrapper(async (req, res) => {
   res.status(200).json({
     status: "success",
     message: "Product deleted successfully",
+  });
+});
+
+exports.updateProduct = asyncWrapper(async (req, res) => {
+  const { id, name, price, category, description, stock, discount } = req.body;
+  if (!id) {
+    return res
+      .status(400)
+      .json({ status: "fail", message: "Product ID is required" });
+  }
+  const existingProduct = await Product.findById(id);
+  if (!existingProduct) {
+    return res
+      .status(404)
+      .json({ status: "fail", message: "Product not found" });
+  }
+
+  const updatedProductData = {
+    name,
+    price,
+    category,
+    description,
+    stock,
+    discount,
+  };
+
+  const updatedProduct = await Product.findByIdAndUpdate(
+    id,
+    updatedProductData,
+    { new: true }
+  );
+
+  res.status(200).json({
+    status: "success",
+    message: "Product updated successfully",
+    data: updatedProduct,
   });
 });
 

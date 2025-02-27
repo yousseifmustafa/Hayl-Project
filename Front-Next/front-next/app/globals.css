@@ -159,10 +159,10 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0px 1000px rgb(212, 178, 87) inset !important;
-  box-shadow: 0 0 0px 1000px rgb(212, 178, 87, 0.7) inset !important;
-  -webkit-text-fill-color: theme("colors.white") !important;
-  color: theme("colors.white") !important;
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-text-fill-color: theme("colors.black") !important;
+  color: theme("colors.custom-yellow-4") !important;
 }
 
 input:focus {

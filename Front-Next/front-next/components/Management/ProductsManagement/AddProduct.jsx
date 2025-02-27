@@ -1,51 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { Categories } from "../../../Data/Data";
 import { AddProductHandler } from "./mangeProductHandler";
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(5, "Minimum product name length is 5 characters")
-    .max(30, "Maximum product name length is 30 characters")
-    .required("Product name is required"),
-  category: Yup.string()
-    .min(5, "Minimum category length is 5 characters")
-    .max(100, "Maximum category length is 100 characters")
-    .required("Category is required"),
-  description: Yup.string()
-    .min(15, "Minimum description length is 15 characters")
-    .max(200, "Maximum description length is 200 characters")
-    .required("Description is required"),
-  price: Yup.number()
-    .positive("Price must be a positive number")
-    .required("Price is required"),
-  priceAfterSale: Yup.number()
-    .test(
-      "is-less-than-price",
-      "Price after sale cannot be greater than the original price",
-      function (value) {
-        return value <= this.parent.price;
-      }
-    )
-    .required("Price after sale is required"),
-  tags: Yup.string().oneOf(
-    ["sale", "new", "bestseller", "featured"],
-    "Invalid tag"
-  ),
-  image: Yup.mixed()
-    .required("Image is required")
-    .test(
-      "fileFormat",
-      "The image must have a valid extension (jpeg, jpg, png, gif)",
-      (value) =>
-        value &&
-        ["image/jpeg", "image/jpg", "image/png", "image/gif"].includes(
-          value.type
-        )
-    ),
-});
+import { validationSchema } from "./productSchema";
 
 export default function AddProduct() {
   const AddProductMutation = AddProductHandler();
@@ -64,7 +22,6 @@ export default function AddProduct() {
     validationSchema,
     onSubmit: (values) => {
       AddProductMutation.mutate(values);
-      console.log("ana el form data ", values);
     },
   });
 
@@ -133,10 +90,17 @@ export default function AddProduct() {
           <div className="flex flex-col md:flex-row w-full gap-3">
             {[
               { label: "Name", id: "name", type: "text" },
-              { label: "Category", id: "category", type: "select", options: Categories },
+              {
+                label: "Category",
+                id: "category",
+                type: "select",
+                options: Categories,
+              },
             ].map(({ label, id, type, options }) => (
               <div key={id} className="flex flex-col gap-2 w-full md:w-[50%]">
-                <label htmlFor={id} className="font-bold text-sm">{label}</label>
+                <label htmlFor={id} className="font-bold text-sm">
+                  {label}
+                </label>
                 {type === "select" ? (
                   <select
                     id={id}
@@ -145,7 +109,9 @@ export default function AddProduct() {
                   >
                     <option value="">-- Choose a {label} --</option>
                     {options.map((option, index) => (
-                      <option key={index} value={option}>{option}</option>
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
                     ))}
                   </select>
                 ) : (
@@ -166,11 +132,22 @@ export default function AddProduct() {
           <div className="flex flex-col md:flex-row w-full gap-3">
             {[
               { label: "Price", id: "price", type: "number" },
-              { label: "Price After Sale", id: "priceAfterSale", type: "number" },
-              { label: "Tags", id: "tags", type: "select", options: ["sale", "new", "bestseller", "featured"] },
+              {
+                label: "Price After Sale",
+                id: "priceAfterSale",
+                type: "number",
+              },
+              {
+                label: "Tags",
+                id: "tags",
+                type: "select",
+                options: ["sale", "new", "bestseller", "featured"],
+              },
             ].map(({ label, id, type, options }) => (
               <div key={id} className="flex flex-col gap-2 w-full md:w-[33%]">
-                <label htmlFor={id} className="font-bold text-sm">{label}</label>
+                <label htmlFor={id} className="font-bold text-sm">
+                  {label}
+                </label>
                 {type === "select" ? (
                   <select
                     id={id}
@@ -179,7 +156,9 @@ export default function AddProduct() {
                   >
                     <option value="">-- Choose a {label} --</option>
                     {options.map((option, index) => (
-                      <option key={index} value={option}>{option}</option>
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
                     ))}
                   </select>
                 ) : (
@@ -198,18 +177,25 @@ export default function AddProduct() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="description" className="font-bold text-sm">Description</label>
+            <label htmlFor="description" className="font-bold text-sm">
+              Description
+            </label>
             <textarea
               id="description"
               className="rounded-lg w-full p-2 border-gray-200 border"
               {...formik.getFieldProps("description")}
             />
             {formik.touched.description && formik.errors.description && (
-              <p className="text-red-500 text-sm">{formik.errors.description}</p>
+              <p className="text-red-500 text-sm">
+                {formik.errors.description}
+              </p>
             )}
           </div>
 
-          <button type="submit" className="rounded-lg text-white bg-custom-yellow-4 py-2 px-6 font-bold">
+          <button
+            type="submit"
+            className="rounded-lg text-white bg-custom-yellow-4 py-2 px-6 font-bold"
+          >
             Add Product
           </button>
         </div>

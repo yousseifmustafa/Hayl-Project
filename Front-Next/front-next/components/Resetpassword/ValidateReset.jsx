@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { logo } from "@/Data/Data";
 import Link from "next/link";
 import {
@@ -13,51 +19,54 @@ export default function CodeVerification() {
   );
   const [resendDisabled, setResendDisabled] = useState(true);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [email, setEmail] = useState(""); // ✅ تخزين الإيميل في state بعد تحميل الصفحة
   const regenerateOtpMutation = useRegeneratePasswordOtpHandler();
   const ValidateResetOtpMutation = useValidateResetOtpHandler();
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    // ✅ تحديث الإيميل بعد تحميل المكون
+    setEmail(sessionStorage.getItem("email") || "");
+  }, []);
 
   useEffect(() => {
     if (resendDisabled) {
-      const timer = setInterval(() => {
+      timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev === 1) {
-            clearInterval(timer);
+            clearInterval(timerRef.current);
             setResendDisabled(false);
             return 0;
           }
           return prev - 1;
         });
       }, 1000);
-
-      return () => clearInterval(timer);
     }
+
+    return () => clearInterval(timerRef.current);
   }, [resendDisabled]);
 
-  const handleChange = useCallback(
-    (element, index) => {
-      const value = element.value.replace(/[^0-9]/g, "");
-      let newCode = [...verificationCode];
+  const handleChange = useCallback((element, index) => {
+    const value = element.value.replace(/[^0-9]/g, "");
 
-      if (value.length === 1) {
-        newCode[index] = value;
-        setVerificationCode(newCode);
+    setVerificationCode((prev) => {
+      const newCode = [...prev];
+      newCode[index] = value.length === 1 ? value : "";
+      return newCode;
+    });
 
-        if (index < 5 && element.nextSibling) {
-          element.nextSibling.focus();
-        }
-      } else {
-        newCode[index] = "";
-        setVerificationCode(newCode);
-      }
-    },
-    [verificationCode]
-  );
+    if (value.length === 1 && index < 5 && element.nextSibling) {
+      element.nextSibling.focus();
+    }
+  }, []);
 
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && !verificationCode[index] && index > 0) {
-      let newCode = [...verificationCode];
-      newCode[index - 1] = "";
-      setVerificationCode(newCode);
+      setVerificationCode((prev) => {
+        const newCode = [...prev];
+        newCode[index - 1] = "";
+        return newCode;
+      });
 
       if (e.target.previousSibling) {
         e.target.previousSibling.focus();
@@ -65,18 +74,28 @@ export default function CodeVerification() {
     }
   };
 
-  const submitCode = async (e) => {
-    e.preventDefault();
-    const otpCode = verificationCode.join("");
-    const email = sessionStorage.getItem("email");
-    ValidateResetOtpMutation.mutate({ email, otpCode });
-  };
-  const RegenerateCode = async (e) => {
-    e.preventDefault();
-    const email = sessionStorage.getItem("email");
+  const submitCode = useCallback(
+    async (e) => {
+      e.preventDefault();
+      const otpCode = verificationCode.join("");
+      if (email) {
+        ValidateResetOtpMutation.mutate({ email, otpCode });
+      }
+    },
+    [verificationCode, ValidateResetOtpMutation, email]
+  );
 
-    regenerateOtpMutation.mutate(email);
-  };
+  const RegenerateCode = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setTimeLeft(60);
+      setResendDisabled(true);
+      if (email) {
+        regenerateOtpMutation.mutate(email);
+      }
+    },
+    [regenerateOtpMutation, email]
+  );
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center p-4 auth absolute top-0 bottom-0 left-0 right-0">
@@ -89,9 +108,7 @@ export default function CodeVerification() {
       <div className="w-full max-w-md mx-auto text-center bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
         <div className="text-gray-800/80 flex flex-col gap-3 text-lg sm:text-xl border-b-2 pb-4 sm:pb-6 border-gray-100">
           <p>Enter the OTP sent to</p>
-          <p className="text-sm sm:text-base font-medium">
-            {sessionStorage.getItem("email")}
-          </p>
+          <p className="text-sm sm:text-base font-medium">{email || "..."}</p>
         </div>
 
         <form
@@ -108,6 +125,8 @@ export default function CodeVerification() {
               onChange={(e) => handleChange(e.target, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               onFocus={(e) => e.target.select()}
+              onPaste={(e) => e.preventDefault()}
+              onDrop={(e) => e.preventDefault()}
             />
           ))}
         </form>
