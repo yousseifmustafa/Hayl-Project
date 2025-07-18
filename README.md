@@ -125,22 +125,23 @@ This platform provides users with seamless registration, product exploration, ca
    ```bash
    cd backend
    npm install
-
+```
 3.Create .env file and configure:
    ```bash
    MONGO_URI=
    JWT_SECRET=
    OTP_EMAIL=
-
+```
 4.Run the backend server:
    ```bash
    npm run dev
-
+```
 5.Run frontend (if separate):
    ```bash
    cd frontend
    npm install
    npm start
+```
 
 📧 Contact
 Made with ❤️ by [Youssef Mustafa]
