@@ -1,7 +1,7 @@
 ![Node.js](https://img.shields.io/badge/Backend-Node.js-green?logo=node.js)
 ![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen?logo=mongodb)
 ![Next.js](https://img.shields.io/badge/Next.js-Frontend-black?logo=next.js)
-![Status](https://img.shields.io/badge/Project-inprogress-brightgreen)
+![Status](https://img.shields.io/badge/Project-v1completed-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 
@@ -33,7 +33,7 @@ This platform provides users with seamless registration, product exploration, ca
 
 ## 📁 Project Structure
 
-- **Frontend:** React (or preferred tech)
+- **Frontend:** Next js
 - **Backend:** Node.js + Express
 - **Database:** MongoDB
 - **Auth:** OTP-based email verification + secure password handling
