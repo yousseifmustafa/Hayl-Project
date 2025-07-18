@@ -1,7 +1,7 @@
 ![Node.js](https://img.shields.io/badge/Backend-Node.js-green?logo=node.js)
 ![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen?logo=mongodb)
 ![Next.js](https://img.shields.io/badge/Next.js-Frontend-black?logo=next.js)
-![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
+![Status](https://img.shields.io/badge/Project-inprogress-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 
