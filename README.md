@@ -145,6 +145,7 @@ This platform provides users with seamless registration, product exploration, ca
 
 📧 Contact
 Made with ❤️ by [Youssef Mustafa]
+
 Feel free to reach out for any questions or collaboration.
 
 
