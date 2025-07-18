@@ -1,3 +1,11 @@
+![Node.js](https://img.shields.io/badge/Backend-Node.js-green?logo=node.js)
+![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen?logo=mongodb)
+![Next.js](https://img.shields.io/badge/Next.js-Frontend-black?logo=next.js)
+![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
+
+
+
 # 🛍️ Elhayl Store - Full Stack E-Commerce Project
 
 Welcome to **Elhayl**, a full-stack e-commerce web application for browsing and purchasing home essentials like cups, spoons, and forks.
