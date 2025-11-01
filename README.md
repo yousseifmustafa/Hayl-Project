@@ -150,6 +150,7 @@ This platform provides users with seamless registration, product exploration, ca
    npm install
    npm start
 
+```
 <div align="right">
     Made with ❤️ by <a href="https://github.com/yousseifmustafa">Yousseif Mustafa</a>
 </div>
