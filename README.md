@@ -121,7 +121,7 @@ This platform provides users with seamless registration, product exploration, ca
 ---
 
 
----
+
 
 ## 🛠️ Setup Instructions
 
@@ -149,11 +149,7 @@ This platform provides users with seamless registration, product exploration, ca
    cd frontend
    npm install
    npm start
-```
 
-📧 Contact
-Made with ❤️ by [Youssef Mustafa]
-
-Feel free to reach out for any questions or collaboration.
-
-
+<div align="right">
+    Made with ❤️ by <a href="https://github.com/yousseifmustafa">Yousseif Mustafa</a>
+</div>
